@@ -1,0 +1,8 @@
+﻿@model SelectList
+
+@foreach (var item in Model)
+{
+    <div>
+        <input type="checkbox" name="selectedProducts" value="@item.Value" /> @item.Text
+    </div>
+}

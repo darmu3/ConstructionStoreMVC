@@ -1,0 +1,41 @@
+﻿@model IEnumerable<applicationmvc.Models.Supplier>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Поставщики</h1>
+
+<p>
+    <a asp-action="Create">Добавить поставщика</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.SupplierName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SupplierAddress)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.SupplierName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SupplierAddress)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.SupplierId">Редактировать</a> |
+                <a asp-action="Details" asp-route-id="@item.SupplierId">Детали</a> |
+                <a asp-action="Delete" asp-route-id="@item.SupplierId">Удалить</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

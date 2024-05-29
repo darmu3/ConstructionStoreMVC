@@ -1,0 +1,29 @@
+﻿@model applicationmvc.Models.Store
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<div>
+    <h4>Детали магазина</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.StoreName)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.StoreName)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.StoreAddress)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.StoreAddress)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.StoreId">Редактировать</a>
+    <span class="separator">|</span>
+    <a asp-action="Index">Вернуться</a>
+</div>
