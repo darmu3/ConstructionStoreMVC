@@ -63,7 +63,6 @@ namespace applicationmvc.Controllers
             ModelState.Remove("Supplier");
             ModelState.Remove("ProductCategory");
             ModelState.Remove("ProductOrders");
-            ModelState.Remove("ProductWarehouses");
 
             if (ModelState.IsValid)
             {
@@ -132,7 +131,6 @@ namespace applicationmvc.Controllers
             ModelState.Remove("Supplier");
             ModelState.Remove("ProductCategory");
             ModelState.Remove("ProductOrders");
-            ModelState.Remove("ProductWarehouses");
 
             if (ModelState.IsValid)
             {
