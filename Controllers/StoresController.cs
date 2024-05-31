@@ -1,8 +1,6 @@
 ﻿using LinqToDB;
-using LinqToDB.AspNet;
 using Microsoft.AspNetCore.Mvc;
 using applicationmvc.Models;
-using System.Threading.Tasks;
 using LinqToDB.Data;
 
 namespace applicationmvc.Controllers
