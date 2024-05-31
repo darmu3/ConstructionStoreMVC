@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<applicationmvc.Models.Product>
 
 @{
-    ViewData["Title"] = "Продукты";
+    ViewData["Title"] = "Товары";
 
     string Truncate(string value, int maxLength)
     {
@@ -10,10 +10,10 @@
     }
 }
 
-<h1>Продукты</h1>
+<h1>Товары</h1>
 
 <p>
-    <a asp-action="Create">Добавить продукт</a>
+    <a asp-action="Create">Добавить товар</a>
 </p>
 
 <table class="table">
