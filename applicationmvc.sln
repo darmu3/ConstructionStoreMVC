@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "applicationmvc", "applicati
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ER-diagrammClasses", "..\ER-diagrammClasses\ER-diagrammClasses.csproj", "{4C5A6627-9FFA-4262-8E2D-AA771DA9C0FC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApiContsructionStore", "..\WebApiContsructionStore\WebApiContsructionStore.csproj", "{229D236F-15D9-431C-B262-BE1EB27FFD28}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApi3", "..\WebApi3\WebApi3.csproj", "{495739EF-F866-43C4-9FE7-A75C08CDBE64}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,10 +23,10 @@ Global
 		{4C5A6627-9FFA-4262-8E2D-AA771DA9C0FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4C5A6627-9FFA-4262-8E2D-AA771DA9C0FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4C5A6627-9FFA-4262-8E2D-AA771DA9C0FC}.Release|Any CPU.Build.0 = Release|Any CPU
-		{229D236F-15D9-431C-B262-BE1EB27FFD28}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{229D236F-15D9-431C-B262-BE1EB27FFD28}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{229D236F-15D9-431C-B262-BE1EB27FFD28}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{229D236F-15D9-431C-B262-BE1EB27FFD28}.Release|Any CPU.Build.0 = Release|Any CPU
+		{495739EF-F866-43C4-9FE7-A75C08CDBE64}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{495739EF-F866-43C4-9FE7-A75C08CDBE64}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{495739EF-F866-43C4-9FE7-A75C08CDBE64}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{495739EF-F866-43C4-9FE7-A75C08CDBE64}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -2,6 +2,7 @@
 using LinqToDB;
 using LinqToDB.AspNet;
 using LinqToDB.Data;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +19,14 @@ builder.Services.AddLinqToDBContext<ApplicationDbContext>((sp, options) =>
 
 builder.Services.AddScoped<DataConnection, ApplicationDbContext>();
 
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/User/Login";
+        options.LogoutPath = "/User/Logout";
+        options.AccessDeniedPath = "/User/AccessDenied";
+    });
+
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
@@ -33,6 +42,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(

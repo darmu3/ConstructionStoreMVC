@@ -1,0 +1,51 @@
+﻿@model applicationmvc.Models.LoginViewModel
+
+@{
+    ViewData["Title"] = "Вход";
+}
+
+<div class="d-flex justify-content-center align-items-center" style="height: 80vh;">
+    <div class="card" style="width: 30rem;">
+        <div class="card-body">
+            <form asp-action="Login">
+                <div class="form-group">
+                    <label asp-for="UserName" class="control-label"></label>
+                    <input asp-for="UserName" class="form-control" />
+                    <span asp-validation-for="UserName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Password" class="control-label"></label>
+                    <div class="input-group">
+                        <input asp-for="Password" class="form-control" type="password" id="password" />
+                        <button type="button" class="btn btn-outline-secondary" onclick="togglePassword()">Показать</button>
+                    </div>
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
+                <div class="form-group text-center">
+                    <button type="submit" class="btn btn-primary">Войти</button>
+                </div>
+                <div class="text-danger text-center">
+                    @Html.ValidationSummary(true)
+                </div>
+            </form>
+            <div class="text-center mt-2">
+                <p class="mb-0">У вас нет учетной записи?</p>
+                <a asp-area="" asp-controller="User" asp-action="Register">Зарегистрируйтесь</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function togglePassword() {
+        var passwordField = document.getElementById('password');
+        var passwordFieldType = passwordField.type;
+        if (passwordFieldType === 'password') {
+            passwordField.type = 'text';
+            event.target.innerText = 'Скрыть';
+        } else {
+            passwordField.type = 'password';
+            event.target.innerText = 'Показать';
+        }
+    }
+</script>
