@@ -1,6 +1,5 @@
 html {
     font-size: 14px;
-    font-family: "Brush Script";
 }
 
 @media (min-width: 768px) {
@@ -16,4 +15,21 @@ html {
 html {
   position: relative;
   min-height: 100%;
+}
+
+@keyframes backgroundPositionAnimation {
+    from {
+        background-position: center top 950px;
+    }
+
+    to {
+        background-position: center top 500px;
+    }
+}
+
+body {
+    background: url('/img/1679057385_bogatyr-club-p-fon-otdelochnie-raboti-foni-krasivo-86.png') no-repeat center top 500px fixed;
+    background-size: cover;
+    font-family: 'Comfortaa', sans-serif;
+    animation: backgroundPositionAnimation 1.5s ease-in-out;
 }

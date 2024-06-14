@@ -96,6 +96,16 @@ namespace applicationmvc.Controllers
                     return View(model);
                 }
 
+                // Проверяем, существует ли пользователь с таким же email
+                existingUser = await _db.GetTable<User>()
+                    .FirstOrDefaultAsync(u => u.PhoneNumber == model.PhoneNumber);
+
+                if (existingUser != null)
+                {
+                    ModelState.AddModelError("PhoneNumber", "Пользователь с таким номером телефона уже зарегистрирован");
+                    return View(model);
+                }
+
                 // Создаем нового пользователя
                 var user = new User
                 {
