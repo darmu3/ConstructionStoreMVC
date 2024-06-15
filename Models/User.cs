@@ -29,5 +29,15 @@ namespace applicationmvc.Models
         [Display(Name = "Пароль")]
         [Required(ErrorMessage = "Поле Пароль обязательно для заполнения.")]
         public string Password { get; set; }
+
+        // Внешний ключ на Role
+        [Column]
+        [Display(Name = "Роль")]
+        [Required(ErrorMessage = "Поле Роль обязательно для заполнения.")]
+        public int RoleId { get; set; }
+
+        // Свойство навигации для Role
+        [LinqToDB.Mapping.Association(ThisKey = "RoleId", OtherKey = "RoleId")]
+        public Role Role { get; set; }
     }
 }

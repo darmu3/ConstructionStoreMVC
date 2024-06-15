@@ -18,5 +18,6 @@ namespace applicationmvc.Context
         public ITable<Order> Order => this.GetTable<Order>();
         public ITable<ProductOrder> ProductOrder => this.GetTable<ProductOrder>();
         public ITable<User> Users => this.GetTable<User>();
+        public ITable<Role> Roles => this.GetTable<Role>();
     }
 }

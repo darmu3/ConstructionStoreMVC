@@ -42,7 +42,8 @@ namespace applicationmvc.Controllers
                     {
                         new Claim(ClaimTypes.Name, user.UserName),
                         new Claim("UserEmail", user.UserEmail),
-                        new Claim("PhoneNumber", user.PhoneNumber)
+                        new Claim("PhoneNumber", user.PhoneNumber),
+                        new Claim(ClaimTypes.Role, user.RoleId.ToString())
                     };
 
                     var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
@@ -74,6 +75,7 @@ namespace applicationmvc.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(User model)
         {
+            ModelState.Remove("Role");
             if (ModelState.IsValid)
             {
                 // Проверяем, существует ли пользователь с таким же именем пользователя
@@ -83,6 +85,16 @@ namespace applicationmvc.Controllers
                 if (existingUser != null)
                 {
                     ModelState.AddModelError("UserName", "Пользователь с таким именем уже существует");
+                    return View(model);
+                }
+
+                // Проверяем, существует ли пользователь с таким же номером телефона
+                existingUser = await _db.GetTable<User>()
+                    .FirstOrDefaultAsync(u => u.PhoneNumber == model.PhoneNumber);
+
+                if (existingUser != null)
+                {
+                    ModelState.AddModelError("PhoneNumber", "Пользователь с таким номером телефона уже зарегистрирован");
                     return View(model);
                 }
 
@@ -96,23 +108,14 @@ namespace applicationmvc.Controllers
                     return View(model);
                 }
 
-                // Проверяем, существует ли пользователь с таким же email
-                existingUser = await _db.GetTable<User>()
-                    .FirstOrDefaultAsync(u => u.PhoneNumber == model.PhoneNumber);
-
-                if (existingUser != null)
-                {
-                    ModelState.AddModelError("PhoneNumber", "Пользователь с таким номером телефона уже зарегистрирован");
-                    return View(model);
-                }
-
                 // Создаем нового пользователя
                 var user = new User
                 {
                     UserName = model.UserName,
                     PhoneNumber = model.PhoneNumber,
                     UserEmail = model.UserEmail,
-                    Password = model.Password
+                    Password = model.Password,
+                    RoleId = 1 // Назначаем роль "пользователь" с RoleId = 1
                 };
 
                 // Вставляем пользователя в базу данных

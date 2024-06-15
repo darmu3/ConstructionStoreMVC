@@ -2,6 +2,12 @@
 
 @{
     ViewData["Title"] = "Index";
+
+    string Truncate(string value, int maxLength)
+    {
+        if (string.IsNullOrEmpty(value)) return value;
+        return value.Length <= maxLength ? value : value.Substring(0, maxLength) + "...";
+    }
 }
 
 <h1>Поставщики</h1>
@@ -22,13 +28,13 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+    @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.SupplierName)
+                @Truncate(item.SupplierName, 25)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.SupplierAddress)
+                @Truncate(item.SupplierAddress, 25)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.SupplierId">Редактировать</a> |

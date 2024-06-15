@@ -3,10 +3,10 @@
     @{
         ViewData["Title"] = "Details";
     }
-
+    
     <div>
-        <h4>Детали заказа</h4>
-        <hr />
+        <h1>Детали заказа</h1>
+        <a asp-action="Index">Вернуться</a>
         <dl class="row">
             <dt class="col-sm-2">
                 @Html.DisplayNameFor(model => model.OrderNumber)
@@ -54,8 +54,4 @@
                 }
             </tbody>
         </table>
-    </div>
-
-    <div>
-        <a asp-action="Index">Вернуться</a>
     </div>

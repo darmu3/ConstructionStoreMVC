@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@using System.Security.Claims
+<!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="utf-8" />
@@ -22,29 +23,41 @@
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-column flex-sm-row">
-                        <!-- Используем flex-column для вертикального расположения ссылок -->
                         <li class="nav-item">
                             <a class="nav-link @(ViewContext.RouteData.Values["controller"].ToString() == "Products" ? "active" : "")"
                                asp-area="" asp-controller="Products" asp-action="Index">Товары</a>
                         </li>
                         @if (User.Identity.IsAuthenticated)
                         {
-                            <li class="nav-item">
-                                <a class="nav-link @(ViewContext.RouteData.Values["controller"].ToString() == "ProductCategories" ? "active" : "")"
-                                   asp-area="" asp-controller="ProductCategories" asp-action="Index">Категории</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link @(ViewContext.RouteData.Values["controller"].ToString() == "Suppliers" ? "active" : "")"
-                                   asp-area="" asp-controller="Suppliers" asp-action="Index">Поставщики</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link @(ViewContext.RouteData.Values["controller"].ToString() == "Stores" ? "active" : "")"
-                                   asp-area="" asp-controller="Stores" asp-action="Index">Магазины</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link @(ViewContext.RouteData.Values["controller"].ToString() == "Orders" ? "active" : "")"
-                                   asp-area="" asp-controller="Orders" asp-action="Index">Заказы</a>
-                            </li>
+                            // Проверка роли
+                            var role = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
+
+                            if (role == "1") // Пользователь
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link @(ViewContext.RouteData.Values["controller"].ToString() == "Orders" ? "active" : "")"
+                                       asp-area="" asp-controller="Orders" asp-action="Index">Заказы</a>
+                                </li>
+                            }
+                            else if (role == "2") // Администратор
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link @(ViewContext.RouteData.Values["controller"].ToString() == "ProductCategories" ? "active" : "")"
+                                       asp-area="" asp-controller="ProductCategories" asp-action="Index">Категории</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link @(ViewContext.RouteData.Values["controller"].ToString() == "Suppliers" ? "active" : "")"
+                                       asp-area="" asp-controller="Suppliers" asp-action="Index">Поставщики</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link @(ViewContext.RouteData.Values["controller"].ToString() == "Stores" ? "active" : "")"
+                                       asp-area="" asp-controller="Stores" asp-action="Index">Магазины</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link @(ViewContext.RouteData.Values["controller"].ToString() == "Orders" ? "active" : "")"
+                                       asp-area="" asp-controller="Orders" asp-action="Index">Заказы</a>
+                                </li>
+                            }
                         }
                     </ul>
                     <ul class="navbar-nav">

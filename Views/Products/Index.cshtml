@@ -1,4 +1,5 @@
-﻿@model IEnumerable<applicationmvc.Models.Product>
+﻿@using System.Security.Claims
+@model IEnumerable<applicationmvc.Models.Product>
 
 @{
     ViewData["Title"] = "Товары";
@@ -8,11 +9,13 @@
         if (string.IsNullOrEmpty(value)) return value;
         return value.Length <= maxLength ? value : value.Substring(0, maxLength) + "...";
     }
+
+    bool isAdmin = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value == "2";
 }
 
 <h1>Товары</h1>
 
-@if (User.Identity.IsAuthenticated)
+@if (isAdmin)
 {
     <p>
         <a asp-action="Create">Добавить товар</a>
@@ -40,7 +43,7 @@
                 <td>@Truncate(item.ProductCategory?.CategoryName ?? "No Category", 25)</td>
                 <td>@Truncate(item.Supplier?.SupplierName ?? "No Supplier", 25)</td>
                 <td>
-                    @if (User.Identity.IsAuthenticated)
+                    @if (isAdmin)
                     {
                         <text>
                             <a href="@Url.Action("Edit", new { id = item.ProductId })">Редактировать</a> |

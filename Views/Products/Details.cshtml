@@ -1,7 +1,9 @@
-﻿@model applicationmvc.Models.Product
+﻿@using System.Security.Claims
+@model applicationmvc.Models.Product
 
 @{
     ViewData["Title"] = "Детали";
+    bool isAdmin = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value == "2";
 }
 
 <div>
@@ -41,17 +43,11 @@
     </dl>
 </div>
 
-@if (User.Identity.IsAuthenticated)
-{
-    <div>
+<div>
+    @if (isAdmin)
+    {
         <a asp-action="Edit" asp-route-id="@Model?.ProductId">Редактировать</a>
         <span class="separator">|</span>
-        <a asp-action="Index">Вернуться</a>
-    </div>
-}
-else
-{
-    <div>
-        <a asp-action="Index">Вернуться</a>
-    </div>
-}
+    }
+    <a asp-action="Index">Вернуться</a>
+</div>

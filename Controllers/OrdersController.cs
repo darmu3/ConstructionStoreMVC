@@ -95,17 +95,9 @@ namespace applicationmvc.Controllers
                     foreach (var productId in selectedProducts)
                     {
                         Console.WriteLine($"Product ID: {productId}");
-                    }
 
-
-                    // Add selected products to order
-                    if (selectedProducts != null)
-                    {
-                        foreach (var productId in selectedProducts)
-                        {
-                            var productOrder = new ProductOrder { OrderId = orderId, ProductId = productId };
-                            await _db.InsertAsync(productOrder);
-                        }
+                        var productOrder = new ProductOrder { OrderId = orderId, ProductId = productId };
+                        await _db.InsertAsync(productOrder);
                     }
 
                     return RedirectToAction(nameof(Index));
@@ -121,7 +113,6 @@ namespace applicationmvc.Controllers
             ViewData["Products"] = _db.GetTable<Product>().ToList();
             return View(order);
         }
-
 
         // GET: Orders/Edit/5
         public async Task<IActionResult> Edit(int? id)
