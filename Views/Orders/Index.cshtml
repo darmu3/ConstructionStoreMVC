@@ -1,7 +1,9 @@
-﻿@model IEnumerable<applicationmvc.Models.Order>
+﻿@model applicationmvc.Models.OrdersViewModel
+@using System.Security.Claims
 
 @{
     ViewData["Title"] = "Index";
+    bool isAdmin = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value == "3";
 }
 
 <h1>Заказы</h1>
@@ -9,26 +11,84 @@
 <p>
     <a asp-action="Create">Добавить заказ</a>
 </p>
+
+@if (Model.IsEmployeeOrAdmin)
+{
+    <h2>Все заказы</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.AllOrders.First().OrderNumber)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.AllOrders.First().OrderDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.AllOrders.First().OrderSum)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.AllOrders.First().Store.StoreName)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.AllOrders)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.OrderNumber)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.OrderDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.OrderSum)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Store.StoreName)
+                    </td>
+                    <td>
+                        @if (isAdmin)
+                        {
+                            <text>
+                                <a asp-action="Details" asp-route-id="@item.OrderId">Детали</a> |
+                                <a asp-action="Delete" asp-route-id="@item.OrderId">Удалить</a>
+                            </text>
+                        }
+                        else
+                        {
+                            <a asp-action="Details" asp-route-id="@item.OrderId">Детали</a>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+<h2>Мои заказы</h2>
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.OrderNumber)
+                @Html.DisplayNameFor(model => model.MyOrders.First().OrderNumber)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.OrderDate)
+                @Html.DisplayNameFor(model => model.MyOrders.First().OrderDate)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.OrderSum)
+                @Html.DisplayNameFor(model => model.MyOrders.First().OrderSum)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Store)
+                @Html.DisplayNameFor(model => model.MyOrders.First().Store.StoreName)
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model)
+        @foreach (var item in Model.MyOrders)
         {
             <tr>
                 <td>

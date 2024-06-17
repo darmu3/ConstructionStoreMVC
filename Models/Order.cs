@@ -1,4 +1,6 @@
 ﻿using LinqToDB.Mapping;
+using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace applicationmvc.Models
@@ -32,5 +34,12 @@ namespace applicationmvc.Models
 
         [LinqToDB.Mapping.Association(ThisKey = nameof(OrderId), OtherKey = nameof(Models.ProductOrder.OrderId))]
         public List<ProductOrder> ProductOrders { get; set; }
+
+        [Column]
+        [Display(Name = "Пользователь")]
+        public int UserId { get; set; }
+
+        [LinqToDB.Mapping.Association(ThisKey = nameof(UserId), OtherKey = nameof(Models.User.UserId))]
+        public User User { get; set; }
     }
 }

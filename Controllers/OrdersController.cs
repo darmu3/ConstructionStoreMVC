@@ -3,9 +3,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using applicationmvc.Models;
 using applicationmvc.Context;
+using Microsoft.AspNetCore.Authorization;
 
 namespace applicationmvc.Controllers
 {
+    [Authorize]
     public class OrdersController : Controller
     {
         private readonly ApplicationDbContext _db;
@@ -16,12 +18,39 @@ namespace applicationmvc.Controllers
         }
 
         // GET: Orders
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var orders = _db.GetTable<Order>()
-                            .LoadWith(o => o.Store)
-                            .ToList();
-            return View(orders);
+            var currentUser = await _db.GetTable<User>().FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+            if (currentUser == null)
+            {
+                return Unauthorized();
+            }
+
+            bool isEmployeeOrAdmin = currentUser.RoleId == 2 || currentUser.RoleId == 3;
+
+            List<Order> allOrders = new List<Order>();
+            List<Order> myOrders = await _db.GetTable<Order>()
+                                            .LoadWith(o => o.Store)
+                                            .LoadWith(o => o.User)
+                                            .Where(o => o.UserId == currentUser.UserId)
+                                            .ToListAsync();
+
+            if (isEmployeeOrAdmin)
+            {
+                allOrders = await _db.GetTable<Order>()
+                                     .LoadWith(o => o.Store)
+                                     .LoadWith(o => o.User)
+                                     .ToListAsync();
+            }
+
+            var model = new OrdersViewModel
+            {
+                AllOrders = allOrders,
+                MyOrders = myOrders,
+                IsEmployeeOrAdmin = isEmployeeOrAdmin
+            };
+
+            return View(model);
         }
 
         // GET: Orders/Details/5
@@ -34,6 +63,7 @@ namespace applicationmvc.Controllers
 
             var order = await _db.GetTable<Order>()
                                  .LoadWith(o => o.Store)
+                                 .LoadWith(o => o.User) // Загружаем информацию о пользователе
                                  .FirstOrDefaultAsync(m => m.OrderId == id);
 
             if (order == null)
@@ -51,7 +81,6 @@ namespace applicationmvc.Controllers
             return View(order);
         }
 
-
         // GET: Orders/Create
         public IActionResult Create()
         {
@@ -66,8 +95,18 @@ namespace applicationmvc.Controllers
         public async Task<IActionResult> Create(Order order, int[] selectedProducts)
         {
             ModelState.Remove("Store");
+            ModelState.Remove("User");
             ModelState.Remove("ProductOrders");
             ModelState.Remove("OrderNumber");
+
+            // Получаем текущего пользователя
+            var currentUser = await _db.GetTable<User>().FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+            if (currentUser == null)
+            {
+                return Unauthorized();
+            }
+
+            order.UserId = currentUser.UserId; // Устанавливаем UserId
 
             if (ModelState.IsValid)
             {
@@ -91,11 +130,8 @@ namespace applicationmvc.Controllers
 
                     var orderId = await _db.InsertWithInt32IdentityAsync(order);
 
-                    Console.WriteLine($"Order ID: {orderId} и id выделенных товаров:");
                     foreach (var productId in selectedProducts)
                     {
-                        Console.WriteLine($"Product ID: {productId}");
-
                         var productOrder = new ProductOrder { OrderId = orderId, ProductId = productId };
                         await _db.InsertAsync(productOrder);
                     }
@@ -136,7 +172,7 @@ namespace applicationmvc.Controllers
         // POST: Orders/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("OrderId,OrderNumber,OrderDate,OrderSum,StoreId")] Order order)
+        public async Task<IActionResult> Edit(int id, [Bind("OrderId,OrderNumber,OrderDate,OrderSum,StoreId,UserId")] Order order)
         {
             if (id != order.OrderId)
             {
@@ -180,6 +216,7 @@ namespace applicationmvc.Controllers
 
             var order = await _db.GetTable<Order>()
                                  .LoadWith(o => o.Store)
+                                 .LoadWith(o => o.User) // Загружаем информацию о пользователе
                                  .FirstOrDefaultAsync(m => m.OrderId == id);
 
             if (order == null)
