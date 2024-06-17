@@ -1,41 +1,58 @@
-﻿@model IEnumerable<applicationmvc.Models.Store>
+﻿@using System.Security.Claims
+@model IEnumerable<applicationmvc.Models.Store>
 
 @{
     ViewData["Title"] = "Index";
+
+    bool isAdmin = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value == "3";
 }
 
 <h1>Магазины</h1>
 
-<p>
-    <a asp-action="Create">Добавить магазин</a>
-</p>
+@if (isAdmin)
+{
+    <p>
+        <a asp-action="Create">Добавить магазин</a>
+    </p>
+}
+
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.StoreName)
+                @Html.DisplayNameFor(model => model.First().StoreName)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.StoreAddress)
+                @Html.DisplayNameFor(model => model.First().StoreAddress)
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.StoreName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.StoreAddress)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.StoreId">Редактировать</a> |
-                <a asp-action="Details" asp-route-id="@item.StoreId">Детали</a> |
-                <a asp-action="Delete" asp-route-id="@item.StoreId">Удалить</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.StoreName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.StoreAddress)
+                </td>
+                <td>
+                    @if (isAdmin)
+                    {
+                        <text>
+                            <a asp-action="Edit" asp-route-id="@item.StoreId">Редактировать</a> |
+                            <a asp-action="Details" asp-route-id="@item.StoreId"> Детали </a> |
+                            <a asp-action="Delete" asp-route-id="@item.StoreId"> Удалить </a>
+                        </text>
+                    }
+                    else
+                    {
+                        <a asp-action="Details" asp-route-id="@item.StoreId">Детали</a>
+                    }
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

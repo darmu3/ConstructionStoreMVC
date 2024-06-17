@@ -1,19 +1,26 @@
-﻿@model IEnumerable<applicationmvc.Models.ProductCategory>
+﻿@using System.Security.Claims
+@model IEnumerable<applicationmvc.Models.ProductCategory>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Категории";
+
+    bool isAdmin = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value == "3";
 }
 
 <h1>Категории</h1>
 
-<p>
-    <a asp-action="Create">Добавить категорию</a>
-</p>
+@if (isAdmin)
+{
+    <p>
+        <a asp-action="Create">Добавить категорию</a>
+    </p>
+}
+
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.CategoryName)
+                @Html.DisplayNameFor(model => model.First().CategoryName)
             </th>
             <th></th>
         </tr>
@@ -26,9 +33,18 @@
                     @Html.DisplayFor(modelItem => item.CategoryName)
                 </td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.ProductCategoryId">Редактировать</a> |
-                    <a asp-action="Details" asp-route-id="@item.ProductCategoryId">Детали</a> |
-                    <a asp-action="Delete" asp-route-id="@item.ProductCategoryId">Удалить</a>
+                    @if (isAdmin)
+                    {
+                        <text>
+                            <a asp-action="Edit" asp-route-id="@item.ProductCategoryId">Редактировать</a> |
+                            <a asp-action="Details" asp-route-id="@item.ProductCategoryId">Детали</a> |
+                            <a asp-action="Delete" asp-route-id="@item.ProductCategoryId">Удалить</a>
+                        </text>
+                    }
+                    else
+                    {
+                        <a asp-action="Details" asp-route-id="@item.ProductCategoryId">Детали</a>
+                    }
                 </td>
             </tr>
         }

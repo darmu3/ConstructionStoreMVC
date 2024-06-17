@@ -43,7 +43,7 @@ namespace applicationmvc.Controllers
                         new Claim(ClaimTypes.Name, user.UserName),
                         new Claim("UserEmail", user.UserEmail),
                         new Claim("PhoneNumber", user.PhoneNumber),
-                        new Claim(ClaimTypes.Role, user.RoleId.ToString())
+                        new Claim(ClaimTypes.Role, user.RoleId.ToString()) // Роль сохраняется как строка
                     };
 
                     var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
@@ -51,6 +51,12 @@ namespace applicationmvc.Controllers
                     await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
 
                     Console.WriteLine("Успешный вход");
+
+                    foreach (var claim in claims)
+                    {
+                        Console.WriteLine($"Claim Type: {claim.Type}, Value: {claim.Value}");
+                    }
+
                     return RedirectToAction("Index", "Products");
                 }
                 else

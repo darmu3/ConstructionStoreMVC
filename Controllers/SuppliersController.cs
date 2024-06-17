@@ -2,14 +2,15 @@
 using Microsoft.AspNetCore.Mvc;
 using applicationmvc.Models;
 using LinqToDB.Data;
+using applicationmvc.Context;
 
 namespace applicationmvc.Controllers
 {
     public class SuppliersController : Controller
     {
-        private readonly DataConnection _db;
+        private readonly ApplicationDbContext _db;
 
-        public SuppliersController(DataConnection db)
+        public SuppliersController(ApplicationDbContext db)
         {
             _db = db;
         }

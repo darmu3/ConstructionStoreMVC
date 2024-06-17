@@ -1,0 +1,40 @@
+﻿@model applicationmvc.Models.ManageRolesViewModel
+
+@{
+    ViewData["Title"] = "Управление ролями";
+}
+
+<h1>Управление ролями</h1>
+
+<form method="post">
+    @if (ViewData.ModelState.Count > 0)
+    {
+        <div class="alert alert-danger">
+            @foreach (var key in ViewData.ModelState.Keys)
+            {
+                foreach (var error in ViewData.ModelState[key].Errors)
+                {
+                    <div>@error.ErrorMessage</div>
+                }
+            }
+        </div>
+    }
+
+    <div class="form-group">
+        <label for="userName">Имя пользователя:</label>
+        <input type="text" class="form-control" id="userName" name="userName">
+    </div>
+
+    <div class="form-group">
+        <label for="roleId">Роль:</label>
+        <select class="form-control" id="roleId" name="roleId">
+            @foreach (var role in Model.Roles)
+            {
+                <option value="@role.RoleId">@role.RoleName</option>
+            }
+        </select>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Изменить роль</button>
+    @Html.AntiForgeryToken()
+</form>

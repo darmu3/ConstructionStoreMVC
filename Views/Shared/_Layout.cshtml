@@ -29,17 +29,16 @@
                         </li>
                         @if (User.Identity.IsAuthenticated)
                         {
-                            // Проверка роли
                             var role = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
 
-                            if (role == "1") // Пользователь
+                            if (role == "1")
                             {
                                 <li class="nav-item">
                                     <a class="nav-link @(ViewContext.RouteData.Values["controller"].ToString() == "Orders" ? "active" : "")"
                                        asp-area="" asp-controller="Orders" asp-action="Index">Заказы</a>
                                 </li>
                             }
-                            else if (role == "2") // Администратор
+                            else if (role == "2" || role == "3")
                             {
                                 <li class="nav-item">
                                     <a class="nav-link @(ViewContext.RouteData.Values["controller"].ToString() == "ProductCategories" ? "active" : "")"
@@ -80,6 +79,17 @@
                                         <span>@User.Claims.FirstOrDefault(c => c.Type == "PhoneNumber")?.Value</span>
                                     </li>
                                     <li><hr class="dropdown-divider"></li>
+                                    @if (User.Identity.IsAuthenticated)
+                                    {
+                                        var role = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
+
+                                        if (role == "3") // Или другая роль, для которой нужно отобразить кнопку "Управление ролями"
+                                        {
+                                            <li>
+                                                <a class="dropdown-item" asp-controller="Admin" asp-action="ManageRoles">Управление ролями</a>
+                                            </li>
+                                        }
+                                    }
                                     <li>
                                         <a class="dropdown-item" asp-controller="User" asp-action="ChangePassword">Изменить пароль</a>
                                     </li>

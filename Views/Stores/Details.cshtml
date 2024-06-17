@@ -1,29 +1,35 @@
-﻿@model applicationmvc.Models.Store
+﻿@using System.Security.Claims
+@model applicationmvc.Models.Store
 
 @{
     ViewData["Title"] = "Details";
+
+    bool isAdmin = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value == "3";
 }
 
 <div>
     <h4>Детали магазина</h4>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.StoreName)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.StoreName)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.StoreAddress)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.StoreAddress)
         </dd>
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.StoreId">Редактировать</a>
-    <span class="separator">|</span>
+    @if (isAdmin)
+    {
+        <a asp-action="Edit" asp-route-id="@Model?.StoreId">Редактировать</a>
+        <span class="separator">|</span>
+    }
     <a asp-action="Index">Вернуться</a>
 </div>
