@@ -1,21 +1,19 @@
 ﻿using LinqToDB;
-using LinqToDB.AspNet;
 using Microsoft.AspNetCore.Mvc;
 using applicationmvc.Models;
-using System.Threading.Tasks;
-using LinqToDB.Data;
+using applicationmvc.Context;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
-using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace applicationmvc.Controllers
 {
     public class UserController : Controller
     {
-        private readonly DataConnection _db;
+        private readonly ApplicationDbContext _db;
 
-        public UserController(DataConnection db)
+        public UserController(ApplicationDbContext db)
         {
             _db = db;
         }
@@ -43,30 +41,21 @@ namespace applicationmvc.Controllers
                         new Claim(ClaimTypes.Name, user.UserName),
                         new Claim("UserEmail", user.UserEmail),
                         new Claim("PhoneNumber", user.PhoneNumber),
-                        new Claim(ClaimTypes.Role, user.RoleId.ToString()) // Роль сохраняется как строка
+                        new Claim(ClaimTypes.Role, user.RoleId.ToString())
                     };
 
                     var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
 
                     await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
 
-                    Console.WriteLine("Успешный вход");
-
-                    foreach (var claim in claims)
-                    {
-                        Console.WriteLine($"Claim Type: {claim.Type}, Value: {claim.Value}");
-                    }
-
                     return RedirectToAction("Index", "Products");
                 }
                 else
                 {
-                    Console.WriteLine("Неуспешный вход");
                     ModelState.AddModelError("", "Неправильное имя пользователя или пароль");
                 }
             }
 
-            Console.WriteLine("Возвращаем представление с ошибкой");
             return View(model);
         }
 
@@ -84,7 +73,6 @@ namespace applicationmvc.Controllers
             ModelState.Remove("Role");
             if (ModelState.IsValid)
             {
-                // Проверяем, существует ли пользователь с таким же именем пользователя
                 var existingUser = await _db.GetTable<User>()
                     .FirstOrDefaultAsync(u => u.UserName == model.UserName);
 
@@ -94,7 +82,6 @@ namespace applicationmvc.Controllers
                     return View(model);
                 }
 
-                // Проверяем, существует ли пользователь с таким же номером телефона
                 existingUser = await _db.GetTable<User>()
                     .FirstOrDefaultAsync(u => u.PhoneNumber == model.PhoneNumber);
 
@@ -104,7 +91,6 @@ namespace applicationmvc.Controllers
                     return View(model);
                 }
 
-                // Проверяем, существует ли пользователь с таким же email
                 existingUser = await _db.GetTable<User>()
                     .FirstOrDefaultAsync(u => u.UserEmail == model.UserEmail);
 
@@ -114,24 +100,20 @@ namespace applicationmvc.Controllers
                     return View(model);
                 }
 
-                // Создаем нового пользователя
                 var user = new User
                 {
                     UserName = model.UserName,
                     PhoneNumber = model.PhoneNumber,
                     UserEmail = model.UserEmail,
                     Password = model.Password,
-                    RoleId = 1 // Назначаем роль "пользователь" с RoleId = 1
+                    RoleId = 1
                 };
 
-                // Вставляем пользователя в базу данных
                 await _db.InsertAsync(user);
 
-                // Перенаправляем пользователя на страницу входа после успешной регистрации
                 return RedirectToAction("Login", "User");
             }
 
-            // Если модель не валидна, возвращаем пользователю представление с ошибками валидации
             return View(model);
         }
 

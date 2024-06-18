@@ -2,7 +2,7 @@
 @model IEnumerable<applicationmvc.Models.Store>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Магазины";
 
     bool isAdmin = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value == "3";
 }

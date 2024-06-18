@@ -63,7 +63,7 @@ namespace applicationmvc.Controllers
 
             var order = await _db.GetTable<Order>()
                                  .LoadWith(o => o.Store)
-                                 .LoadWith(o => o.User) // Загружаем информацию о пользователе
+                                 .LoadWith(o => o.User)
                                  .FirstOrDefaultAsync(m => m.OrderId == id);
 
             if (order == null)
@@ -216,7 +216,7 @@ namespace applicationmvc.Controllers
 
             var order = await _db.GetTable<Order>()
                                  .LoadWith(o => o.Store)
-                                 .LoadWith(o => o.User) // Загружаем информацию о пользователе
+                                 .LoadWith(o => o.User)
                                  .FirstOrDefaultAsync(m => m.OrderId == id);
 
             if (order == null)

@@ -1,7 +1,6 @@
 ﻿using LinqToDB;
 using Microsoft.AspNetCore.Mvc;
 using applicationmvc.Models;
-using LinqToDB.Data;
 using applicationmvc.Context;
 
 namespace applicationmvc.Controllers
@@ -23,7 +22,7 @@ namespace applicationmvc.Controllers
         }
 
         // GET: Suppliers/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int id)
         {
             if (id == null)
             {
@@ -62,7 +61,7 @@ namespace applicationmvc.Controllers
         }
 
         // GET: Suppliers/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(int id)
         {
             if (id == null)
             {
@@ -114,7 +113,7 @@ namespace applicationmvc.Controllers
         }
 
         // GET: Suppliers/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(int id)
         {
             if (id == null)
             {

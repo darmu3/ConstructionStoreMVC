@@ -1,15 +1,15 @@
 ﻿using LinqToDB;
 using Microsoft.AspNetCore.Mvc;
 using applicationmvc.Models;
-using LinqToDB.Data;
+using applicationmvc.Context;
 
 namespace applicationmvc.Controllers
 {
     public class ProductCategoriesController : Controller
     {
-        private readonly DataConnection _db;
+        private readonly ApplicationDbContext _db;
 
-        public ProductCategoriesController(DataConnection db)
+        public ProductCategoriesController(ApplicationDbContext db)
         {
             _db = db;
         }
@@ -49,7 +49,7 @@ namespace applicationmvc.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ProductCategoryId,CategoryName")] ProductCategory productCategory)
         {
-            ModelState.Remove("Products"); // Удаляем свойство Products из ModelState, чтобы оно не валидировалось
+            ModelState.Remove("Products");
             if (ModelState.IsValid)
             {
                 try
@@ -60,11 +60,6 @@ namespace applicationmvc.Controllers
                 catch (LinqToDBException ex)
                 {
                     Console.WriteLine("Error occurred while creating product category: " + ex.Message);
-                    return View(productCategory);
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine("General error occurred while creating product category: " + ex.Message);
                     return View(productCategory);
                 }
             }
@@ -112,21 +107,7 @@ namespace applicationmvc.Controllers
             ModelState.Remove("Products");
             if (ModelState.IsValid)
             {
-                try
-                {
-                    await _db.UpdateAsync(productCategory);
-                }
-                catch (LinqToDBException)
-                {
-                    if (!ProductCategoryExists(productCategory.ProductCategoryId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
+                await _db.UpdateAsync(productCategory);
                 return RedirectToAction(nameof(Index));
             }
             return View(productCategory);

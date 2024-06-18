@@ -83,7 +83,7 @@
                                     {
                                         var role = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
 
-                                        if (role == "3") // Или другая роль, для которой нужно отобразить кнопку "Управление ролями"
+                                        if (role == "3")
                                         {
                                             <li>
                                                 <a class="dropdown-item" asp-controller="Admin" asp-action="ManageRoles">Управление ролями</a>

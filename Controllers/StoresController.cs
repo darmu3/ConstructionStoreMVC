@@ -1,15 +1,15 @@
 ﻿using LinqToDB;
 using Microsoft.AspNetCore.Mvc;
 using applicationmvc.Models;
-using LinqToDB.Data;
+using applicationmvc.Context;
 
 namespace applicationmvc.Controllers
 {
     public class StoresController : Controller
     {
-        private readonly DataConnection _db;
+        private readonly ApplicationDbContext _db;
 
-        public StoresController(DataConnection db)
+        public StoresController(ApplicationDbContext db)
         {
             _db = db;
         }
@@ -22,7 +22,7 @@ namespace applicationmvc.Controllers
         }
 
         // GET: Stores/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int id)
         {
             if (id == null)
             {
@@ -61,7 +61,7 @@ namespace applicationmvc.Controllers
         }
 
         // GET: Stores/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(int id)
         {
             if (id == null)
             {
@@ -113,7 +113,7 @@ namespace applicationmvc.Controllers
         }
 
         // GET: Stores/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(int id)
         {
             if (id == null)
             {

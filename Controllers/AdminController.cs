@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using applicationmvc.Models;
 using applicationmvc.Context;
-using System.Linq;
-using System.Threading.Tasks;
 using LinqToDB;
 
 namespace applicationmvc.Controllers
@@ -21,7 +19,7 @@ namespace applicationmvc.Controllers
         {
             var model = new ManageRolesViewModel
             {
-                Roles = await _context.Roles.ToListAsync() // Получаем все роли
+                Roles = await _context.Roles.ToListAsync()
             };
 
             return View(model);
@@ -32,7 +30,6 @@ namespace applicationmvc.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ManageRoles(string userName, int roleId)
         {
-            // Найти пользователя по userName
             var user = await _context.Users.FirstOrDefaultAsync(u => u.UserName == userName);
 
             if (user == null)
@@ -40,15 +37,14 @@ namespace applicationmvc.Controllers
                 ModelState.AddModelError(string.Empty, $"Пользователь с именем \"{userName}\" не найден.");
                 var model = new ManageRolesViewModel
                 {
-                    Roles = await _context.Roles.ToListAsync() // Получаем все роли
+                    Roles = await _context.Roles.ToListAsync()
                 };
                 return View(model);
             }
 
-            // Обновляем роль пользователя
             user.RoleId = roleId;
 
-            await _context.UpdateAsync(user); // Асинхронное обновление пользователя
+            await _context.UpdateAsync(user);
 
             return RedirectToAction(nameof(ManageRoles));
         }

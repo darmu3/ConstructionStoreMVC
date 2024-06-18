@@ -76,11 +76,6 @@ namespace applicationmvc.Controllers
                     Console.WriteLine("Error occurred while creating product: " + ex.Message);
                     return View(product);
                 }
-                catch (Exception ex)
-                {
-                    Console.WriteLine("General error occurred while creating product: " + ex.Message);
-                    return View(product);
-                }
             }
             else
             {
